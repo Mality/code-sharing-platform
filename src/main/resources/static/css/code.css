@@ -1,0 +1,11 @@
+#load_date {
+    color: forestgreen;
+    height: 2px;
+}
+
+#code_snippet {
+    margin-top: 1px;
+    border: 1px solid black;
+    background: lightgray;
+}
+
