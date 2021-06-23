@@ -33,13 +33,11 @@ public class API {
 
     /**
      * Get code by uuid
-     * @param response
      * @param uuid
      * @return
      */
     @GetMapping("/{uuid}")
-    public CodeDTO getCodeByUuid(HttpServletResponse response, @PathVariable String uuid) {
-        response.addHeader("Content-Type", "application/json");
+    public CodeDTO getCodeByUuid(@PathVariable String uuid) {
         try {
             Code code = codeService.findByUuid(uuid);
             code.setViewsLeft(code.getViewsLeft() - 1);
@@ -60,8 +58,7 @@ public class API {
      * Get last 10 codes without any restriction
      */
     @GetMapping("/latest")
-    public List<CodeDTO> get10LatestNotRestrictedCodes(HttpServletResponse response) {
-        response.addHeader("Content-Type", "application/json");
+    public List<CodeDTO> get10LatestNotRestrictedCodes() {
         List<Code> codes = codeService.getLastTenNotRestrictedCodes();
         codes = codes.stream().peek(code -> code.setViewsLeft(code.getViewsLeft() - 1)).collect(Collectors.toList());
         List<Code> list = new ArrayList<>(codes);
