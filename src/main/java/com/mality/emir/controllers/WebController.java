@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @RequestMapping("/code")
 public class WebController {
 
@@ -24,35 +26,33 @@ public class WebController {
     private final Logger log = LoggerFactory.getLogger(WebController.class);
 
     @GetMapping("/{uuid}")
-    public ModelAndView getCodeByUuid(@PathVariable String uuid) {
+    public String getCodeByUuid(@PathVariable String uuid, Model model) {
         log.info("Get code by uuid: " + uuid);
-        ModelAndView model = new ModelAndView("code");
         try {
             Code code = codeService.findByUuid(uuid);
             code.setViewsLeft(code.getViewsLeft() - 1);
             codeService.save(code);
-            model.addObject("codes", List.of(code));
-            model.addObject("latest", false);
+            model.addAttribute("codes", List.of(code));
+            model.addAttribute("latest", false);
         } catch (CodeNotFoundException e) {
             log.warn(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return model;
+        return "code";
     }
 
     @GetMapping("/latest")
-    public ModelAndView get10LatestNotRestrictedCodes() {
-        ModelAndView model = new ModelAndView("code");
-        model.addObject("latest", true);
+    public String get10LatestNotRestrictedCodes(Model model) {
+        model.addAttribute("latest", true);
         List<Code> codes = codeService.getLastTenNotRestrictedCodes();
         codes = codes.stream().peek(code -> code.setViewsLeft(code.getViewsLeft() - 1)).collect(Collectors.toList());
-        model.addObject("codes", codes);
-        return model;
+        model.addAttribute("codes", codes);
+        return "code";
     }
 
     @GetMapping("/new")
-    public ModelAndView getNewCodePage() {
-        return new ModelAndView("code_new");
+    public String getNewCodePage() {
+        return "code_new";
     }
 
     @Autowired
