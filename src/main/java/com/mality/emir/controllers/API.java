@@ -72,11 +72,11 @@ public class API {
      */
     @PostMapping("/new")
     public String postNewCode(@RequestBody CodeDTO code) {
-        log.info("Post new code");
         LocalDateTime dateTime = LocalDateTime.now();
         System.out.println(code.getTime() + " " + code.getViews());
         Code newCode = new Code(code.getCode(), dateTime, code.getTime(), code.getViews());
         codeService.save(newCode);
+        log.info("New code uuid: " + newCode.getUuid());
         return "{ \"id\": \"" + newCode.getUuid() + "\" }";
     }
 
