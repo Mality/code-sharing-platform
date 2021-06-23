@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,11 +26,6 @@ public class API {
     private CodeService codeService;
 
     private final Logger log = LoggerFactory.getLogger(API.class);
-
-    @GetMapping("/test")
-    public void test() {
-        codeService.findByUuid("sadas");
-    }
 
     /**
      * Get code by uuid
@@ -71,9 +67,8 @@ public class API {
      * @return
      */
     @PostMapping("/new")
-    public String postNewCode(@RequestBody CodeDTO code) {
+    public String postNewCode(@RequestBody @Valid CodeDTO code) {
         LocalDateTime dateTime = LocalDateTime.now();
-        System.out.println(code.getTime() + " " + code.getViews());
         Code newCode = new Code(code.getCode(), dateTime, code.getTime(), code.getViews());
         codeService.save(newCode);
         log.info("New code uuid: " + newCode.getUuid());

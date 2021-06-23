@@ -2,11 +2,19 @@ package com.mality.emir.code;
 
 import com.sun.istack.NotNull;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+
 public class CodeDTO {
 
     private String code;
+
+    // yyyy/MM/dd HH:mm:ss
+    @Pattern(regexp = "\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}")
     private String date;
+
     private Integer time;
+
     private Integer views;
 
     public CodeDTO(String code, String date, Integer time, Integer views) {
