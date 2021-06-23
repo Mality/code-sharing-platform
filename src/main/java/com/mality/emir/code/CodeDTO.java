@@ -2,7 +2,6 @@ package com.mality.emir.code;
 
 import com.sun.istack.NotNull;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
 public class CodeDTO {

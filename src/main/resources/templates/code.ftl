@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title><#if latest>Latest<#else>Code</#if></title>
+    <title>${title}</title>
     <link rel="stylesheet" href="/css/code.css">
 
     <link rel="stylesheet"

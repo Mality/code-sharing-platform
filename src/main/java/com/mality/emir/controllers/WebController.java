@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ public class WebController {
             code.setViewsLeft(code.getViewsLeft() - 1);
             codeService.save(code);
             model.addAttribute("codes", List.of(code));
-            model.addAttribute("latest", false);
+            model.addAttribute("title", "Code");
         } catch (CodeNotFoundException e) {
             log.warn(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -43,7 +42,7 @@ public class WebController {
 
     @GetMapping("/latest")
     public String get10LatestNotRestrictedCodes(Model model) {
-        model.addAttribute("latest", true);
+        model.addAttribute("title", "Latest");
         List<Code> codes = codeService.getLastTenNotRestrictedCodes();
         codes = codes.stream().peek(code -> code.setViewsLeft(code.getViewsLeft() - 1)).collect(Collectors.toList());
         model.addAttribute("codes", codes);
